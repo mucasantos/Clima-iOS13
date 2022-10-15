@@ -15,19 +15,24 @@ protocol WeatherManagerDelegate {
 }
 
 struct WeatherManager {
-    let apiURL = "https://api.openweathermap.org/data/2.5/weather?appid={API_KEY}&units=metric"
+    let apiURL = "https://api.openweathermap.org/data/2.5/weather?appid=***&units=metric"
     
     var delegate: WeatherManagerDelegate?
     
     func fetchWeather(cityName: String)  {
-        let urlString = "\(apiURL)&q=\(cityName)"
+                        
+        let city = cityName.replacingOccurrences(of: " ", with: "%20")
+        let urlString = "\(apiURL)&q=\(city)"
+       
+        
         performRequest(urlString: urlString)
     }
     
     func performRequest(urlString: String) {
         //Create Url
-        
+    
         if let url = URL(string: urlString) {
+            print(url)
             
             //Create URLSession
             let session = URLSession(configuration: .default)
@@ -49,6 +54,8 @@ struct WeatherManager {
             //Start the task
             task.resume()
         }
+        
+        print("Nao criou url...")
     }
     
     func parseJSON(weatherData: Data) -> WeatherModel? {
