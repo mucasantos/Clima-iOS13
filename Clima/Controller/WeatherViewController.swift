@@ -6,6 +6,9 @@
 //  Copyright © 2019 App Brewery. All rights reserved.
 //
 
+
+
+
 import UIKit
 
 class WeatherViewController: UIViewController, UITextFieldDelegate {
@@ -14,6 +17,8 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
+    
+    var weatherManager = WeatherManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +30,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBAction func searchPressed(_ sender: UIButton) {
         
         searchTextField.endEditing(true)
-        
+            
        print( searchTextField.text! )
     }
     
@@ -40,12 +45,17 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         if searchTextField.text != "" {
             return true
         }else {
-            searchTextField.text = "Digite algo ..."
-        return false
+            searchTextField.placeholder = "Digite algo ..."
+            return false
         }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+                
+        if let city = searchTextField.text {
+            
+            weatherManager.fetchWeather(cityName: city)
+        }
         
         
         searchTextField.text = ""
